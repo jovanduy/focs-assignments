@@ -8,6 +8,22 @@
 ;;     Hint:  The tail recursive version will use a helper function.
 
 
+(define (factorial x)
+  (cond [(= x 0) 1]
+  		[else (* x (factorial (- x 1)))]))
+
+(factorial 3) ;; -> 6
+
+(define (factorial-tail x)
+  (factorial-helper x 1))
+
+(define (factorial-helper x acc)
+  (cond [(= x 0) acc]
+  		[else (factorial-helper (- x 1) (* x acc))]))
+
+(factorial-tail 3) ;; -> 6
+
+
 ;;;;;;;;;;;
 ;; 1.  Filter is built in to scheme.
 
@@ -18,7 +34,13 @@
 
 ;; Implement it anyway.  You might want to call it my-filter?  What arguments does it take?
 
+(define (my-filter procedure lst)
+  (cond [(null? lst) lst]
+  		[(procedure (car lst)) (cons (car lst) (my-filter procedure (cdr lst)))]
+  		[else (my-filter procedure (cdr lst))]))
 
+
+(my-filter even? '(1 2 3 4 5 6)) ;; -> '(2 4 6)
 
 
 
@@ -35,7 +57,13 @@
 
 ;; Implement it as well.  You might want to call it my-map.  What arguments does it take?
 
+(define (my-map procedure lst)
+ (cond [(null? lst) lst]
+ 	   [else (cons (procedure (car lst)) (my-map procedure (cdr lst)))]))
 
+(define (double x) (* 2 x))
+
+(map double '(1 2 3)) ;; -> '(2 4 6)
 
 
 
@@ -52,7 +80,15 @@
 ;; as well as for the new list.  Confirm with a member of the instructional staff....
 
 
+(define (my-append lst1 lst2)
+  (cond [(null? lst1) lst2]
+  		[(null? (cdr lst1)) (cons (car lst1) (my-append (cdr lst1) lst2))]
+  		[else (cons (car lst1) (my-append (cdr lst1) lst2))]))
 
+(my-append '(1 2 3) '(4 5 6)) ;; -> '(1 2 3 4 5 6)
+(my-append '(1) '(1 2 3)) ;; -> '(1 1 2 3)
+(my-append '() '(1 2 3)) ;; -> '(1 2 3)
+(my-append '(1 2 3) '()) ;; -> '(1 2 3)
 
 
 ;;;;;;;;;;;
@@ -63,7 +99,14 @@
 
 ;; Implement `zip`.
 
+(define (my-zip lst1 lst2)
+  (cond [(null? lst1) lst1]
+  		[(null? lst2) lst2]
+  		[else (cons (cons (car lst1) (cons (car lst2) '())) (my-zip (cdr lst1) (cdr lst2)))]))
 
+(my-zip '(1 2 3) '(4 5 6)) ;; -> '((1 4) (2 5) (3 6))
+(my-zip '(1 2 3) '(a b c d e f g)) ;; -> '((1 a) (2 b) (3 c))
+(my-zip '(a b c d e f g) '(1 2 3)) ;; -> '((a 1) (b 2) (c 3))
 
 
 ;;;;;;;;;;;;
@@ -72,7 +115,15 @@
 
 ;; (reverse '(1 2 3)) --> '(3 2 1)
 
+(define (my-reverse lst)
+  (reverse-helper lst '()))
 
+(define (reverse-helper lst acc)
+  (cond [(null? lst) acc]
+  		[else (reverse-helper (cdr lst) (cons (car lst) acc))]))
+
+(my-reverse '(1 2 3)) ;; -> '(3 2 1)
+(my-reverse '(1))
 
 ;;;;;;;;;;;;
 ;; More puzzles:
