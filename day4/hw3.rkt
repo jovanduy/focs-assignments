@@ -3,9 +3,9 @@
 ;;; Student Name: Jordan Van Duyne
 ;;;;
 ;;; Check one:
-;;; [x] I completed this assignment without assistance or external resources.
-;;; [ ] I completed this assignment with assistance from ___
-;;;     and/or using these external resources: ___
+;;; [ ] I completed this assignment without assistance or external resources.
+;;; [x] I completed this assignment with assistance from ___
+;;;     and/or using these external resources: https://docs.racket-lang.org/reference/pairs.html
 
 ;;;;;;;;;;;
 ;; 1. assq
@@ -43,7 +43,7 @@
 (my-assq 'ADD operator-list);; --> '(ADD #<procedure:+>)
 (my-assq 'ANND operator-list);; --> '(ANND #<procedure>)
 (my-assq 'FOO operator-list);; --> #f
-
+(my-assq 'x '((x 3) (y 2) (z -5)))
 
 
 ;;;;;;;;;;;
@@ -54,26 +54,37 @@
 ;; Add the `lookup-list` argument to your hw2 evaluator (or ours, from the solution set).
 ;; `(evaluate 'foo lookup-list)` should return whatever `'foo` is associated with in `lookup-list`.
 
-(define (calculate x)
-  (cond [(eq? (car x) 'ADD) (+ (evaluate(car (cdr x))) (evaluate(car (cdr (cdr x)))))]
-  		[(eq? (car x) 'SUB) (- (evaluate(car (cdr x))) (evaluate(car (cdr (cdr x)))))]
-  		[(eq? (car x) 'MUL) (* (evaluate(car (cdr x))) (evaluate(car (cdr (cdr x)))))]
-  		[(eq? (car x) 'DIV) (/ (evaluate(car (cdr x))) (evaluate(car (cdr (cdr x)))))]
-  		[(eq? (car x) 'GT)  (> (evaluate(car (cdr x))) (evaluate(car (cdr (cdr x)))))]
-  		[(eq? (car x) 'LT)  (< (evaluate(car (cdr x))) (evaluate(car (cdr (cdr x)))))]
-  		[(eq? (car x) 'GE)  (>= (evaluate(car (cdr x))) (evaluate(car (cdr (cdr x)))))]
-  		[(eq? (car x) 'LE)  (<= (evaluate(car (cdr x))) (evaluate(car (cdr (cdr x)))))]
-  		[(eq? (car x) 'EQ)  (= (evaluate(car (cdr x))) (evaluate(car (cdr (cdr x)))))]
-  		[(eq? (car x) 'NEQ) (not (= (evaluate(car (cdr x))) (evaluate(car (cdr (cdr x))))))]
-  		[(eq? (car x) 'ANND) (and (evaluate(car (cdr x))) (evaluate(car (cdr (cdr x)))))]
-		[(eq? (car x) 'ORR)  (or (evaluate(car (cdr x))) (evaluate(car (cdr (cdr x)))))]
-		[(eq? (car x) 'NOTT) (not (evaluate(car (cdr x))))]
-  		[(eq? (car x) 'IPH) (if (evaluate(car (cdr x))) (evaluate(car (cdr (cdr x)))) (evaluate(car (cdr (cdr (cdr x))))))]
-  		[(eq? (car x) 'UMINUS) (* (evaluate(car (cdr x))) -1)]))
+(define (calculate x lst)
+  (cond [(eq? (car x) 'ADD) (+ (get-value (car (cdr x)) lst) (get-value (car (cdr (cdr x))) lst))]
+  		[(eq? (car x) 'SUB) (- (get-value (car (cdr x)) lst) (get-value (car (cdr (cdr x))) lst))]
+  		[(eq? (car x) 'MUL) (* (get-value (car (cdr x)) lst) (get-value (car (cdr (cdr x))) lst))]
+  		[(eq? (car x) 'DIV) (/ (get-value (car (cdr x)) lst) (get-value (car (cdr (cdr x))) lst))]
+  		[(eq? (car x) 'GT)  (> (get-value (car (cdr x)) lst) (get-value (car (cdr (cdr x))) lst))]
+  		[(eq? (car x) 'LT)  (< (get-value (car (cdr x)) lst) (get-value (car (cdr (cdr x))) lst))]
+  		[(eq? (car x) 'GE)  (>= (get-value (car (cdr x)) lst) (get-value (car (cdr (cdr x))) lst))]
+  		[(eq? (car x) 'LE)  (<= (get-value (car (cdr x)) lst) (get-value(car (cdr (cdr x))) lst))]
+  		[(eq? (car x) 'EQ)  (= (get-value (car (cdr x)) lst) (get-value(car (cdr (cdr x))) lst))]
+  		[(eq? (car x) 'NEQ) (not (= (get-value (car (cdr x)) lst) (get-value (car (cdr (cdr x))) lst)))]
+  		[(eq? (car x) 'ANND) (and (get-value (car (cdr x)) lst) (get-value (car (cdr (cdr x))) lst))]
+		[(eq? (car x) 'ORR)  (or (get-value (car (cdr x)) lst) (get-value (car (cdr (cdr x))) lst))]
+		[(eq? (car x) 'NOTT) (not (get-value (car (cdr x)) lst))]
+  		[(eq? (car x) 'IPH) (if (get-value (car (cdr x)) lst) (get-value (car (cdr (cdr x))) lst) (get-value (car (cdr (cdr (cdr x)))) lst))]
+  		[(eq? (car x) 'UMINUS) (* (get-value (car (cdr x)) lst) -1)]
+  		[else (error "Unknown operator " (car x))]))
 
-
-(define (evaluate x)
-  (cond [(number? x) x]
+(define (get-value x lst)
+  (cond [(not (eq? #f (my-assq x lst))) (get-value (list-ref (my-assq x lst) 1) lst)]
+  		[(number? x) x]
   		[(boolean? x) x]
-  		[else (calculate x)]))
+  		[else (evaluate x lst)]))
+
+
+(define (evaluate expr lst)
+  (cond [(list? expr) (calculate expr lst)]
+  		[else (get-value expr lst)]))
+
+(evaluate '(ADD x y) '((x 3) (y 2) (z -5)))
+(evaluate '(IPH (GT x 0) x (SUB 0 x)) '((x 3) (y 2) (z -5)))
+(evaluate 'y  '((x 3) (y 2) (z -5)))
+(evaluate '(IPH (GT z 0) z (SUB 0 z)) '((x 3) (y 2) (z -5)))
 
