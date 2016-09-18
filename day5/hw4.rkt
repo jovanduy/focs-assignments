@@ -40,6 +40,9 @@
   		[(eq? key (car (list-ref lst 0))) (cadr (list-ref lst 0))]
   		[else (my-assq key (list-tail lst 1))]))
 
+(define (apply-proc closure args)
+  (get-value (cadr closure) (map list (car closure) args)))
+
 (define (get-value x defns)
   (cond [(number? x) x]
   		[(boolean? x) x]
@@ -47,6 +50,7 @@
   		[(symbol? x) (my-assq x defns)]
   		[(eq? (car x) 'DEFINE) (repl (append defns (list (list (cadr x) (get-value (car (cdr (cdr x))) defns)))))]
   		[(eq? (car x) 'LAMBDA) (list 'lambda (cadr x) (caddr x) defns)]
+  		[(list? (car x)) (apply-proc (cdar x) (map (lambda (n) (get-value n defns)) (cdr x)))]
   		[else (apply (my-assq (car x) operator-list) (map (lambda (n) (get-value n defns)) (cdr x)))]))
 
 
