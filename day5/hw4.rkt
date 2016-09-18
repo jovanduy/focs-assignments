@@ -46,6 +46,7 @@
   		[(procedure? x) x]
   		[(symbol? x) (my-assq x defns)]
   		[(eq? (car x) 'DEFINE) (repl (append defns (list (list (cadr x) (get-value (car (cdr (cdr x))) defns)))))]
+  		[(eq? (car x) 'LAMBDA) (list 'lambda (cadr x) (caddr x) defns)]
   		[else (apply (my-assq (car x) operator-list) (map (lambda (n) (get-value n defns)) (cdr x)))]))
 
 
