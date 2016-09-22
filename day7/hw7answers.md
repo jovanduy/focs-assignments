@@ -19,7 +19,7 @@ b. ((\\(\\))\*(\\((\\(\\))\*\\))\*)\*
 
 (([])\*([([])\*])\*)\*
 
-(the one with brackets represents the same as the one without brackets where \( and \) are replaced by [ and ], respectively, to allow for easier reading)
+(the one with brackets represents the same as the one without brackets where \\( and \\) are replaced by [ and ], respectively, to allow for easier reading)
 
 c. (([])\* ([([])\*])\* ([([([])\*])\*])\*)\*
 
