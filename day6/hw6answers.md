@@ -65,3 +65,5 @@ Did the reading! Woohoo.
 ## 6. Regular Expression Practice
 
 0<sup>\*</sup>10<sup>\*</sup>
+
+The first `0*` matches any string that starts with any number of 0s (including no 0s). The `1` matches any string that, after the beginning string of 0s, has exactly one 1. The second `0*` matches any strings that after the singular 1 have any number of 0s (including no 0s). Any string that does not fit this format is not accepted by the regular expression.
