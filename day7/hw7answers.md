@@ -15,12 +15,17 @@ Note: the \ is shown to escape the ( and ) characters (in order to separate from
 
 a. (\\(\\))\*
 
+b. ([([])*])*
+
+not as good
 b. ((\\(\\))\*(\\((\\(\\))\*\\))\*)\*
 
 (([])\*([([])\*])\*)\*
 
 (the one with brackets represents the same as the one without brackets where \\( and \\) are replaced by [ and ], respectively, to allow for easier reading)
 
+c. ([([([])*])*])*
+not as good
 c. (([])\* ([([])\*])\* ([([([])\*])\*])\*)\*
 
 ((\\(\\))\* (\\((\\(\\))\*\))\* (\\((\\((\\(\\))\*\\))\*\\))\*)\*
