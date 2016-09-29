@@ -6,7 +6,23 @@ Check one:
 
 ## 1. For each of the following languages, decide whether it is regular
 
-a)
+a) Strings containing only the symbol a whose length is a power of 2 (i.e. length 2^n)
+
+[The strings a, aa, aaaa, and aaaaaaaa are in this language; the string aaaaa is not.]
+
+Not regular.
+
+Assume for contradiction that this language, *L*, is regular.
+
+By the pumping lemma, there is some length *p* such that all words *w* in *L* of length *p* or greater can be pumped.
+
+Let *s* be the string a<sup>2<sup>p</sup></sup>. Thus, the length of *s* is greater than *p*, since for any positive power *j* of 2, *2<sup>j</sup> > j* (1, 2, 4, 8, 16 are the values of 2 to the 0, 1, 2, ..., 4, respectively, and the values continue growing exponentially, while the exponents only increase by 1). The pumping lemma therefore guarantees that *s* can be split into three pieces *s = xyz*, where for any *i* ≥ 0, the string *xy<sup>i</sup>z* is in *L*.
+
+Consider the strings *xyz* and *xyyz*, where *xyyz* should be the word in *L* where *n* is one greater than in *xyz*; so *s = xyz* and a<sup>2<sup>p + 1</sup></sup> = *xyyz*. These strings differ from each other by a single repetition of *y*, so their lengths differ by |*y*|.
+
+By the pumping lemma, |*xy*| ≤ *p*, and thus |*y*| ≤ *p* since |*x*| ≥ 0. The pumping lemma also guarantees that *y* is not the empty string.
+
+We have |*xyz*| = *2<sup>p</sup>*, so |*xyyz*| ≤ *2<sup>p</sup> + p*. However, *2<sup>p + 1</sup> = 2<sup>p</sup> +  2<sup>p</sup> > 2<sup>p</sup> + p* (as shown above). So, |*xyyz*| is between *2<sup>p</sup>* and *2<sup>p + 1</sup>*, meaning that the length of |*xyyz*| cannot be *2<sup>j</sup>*, so we have a contradiction! Thus, *xyyz* is not in *L*, meaning *L* cannot be regular.
 
 b) All strings with an equal number of occurrences of the substrings 01 and 10.
 
