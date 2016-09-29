@@ -34,6 +34,16 @@ b) All strings with an equal number of occurrences of the substrings 01 and 10.
 
 c) All strings (over {0,1}) consisting of a substring w followed by the reverse of the substring.
 
+Not regular.
+
+Assume for contradiction that this language, *L*, is regular.
+
+By the pumping lemma, there is some length *p* such that all words *w* in *L* of length *p* or greater can be pumped.
+
+Let *s* be the string *0<sup>p</sup>110<sup>p</sup>*. Since |*s*| = *2p + 2 ≥ p*, the pumping lemma guarantees that *s* can be split into three pieces *s = xyz*, where for any *i ≥ 0*, the string *xy<sup>i</sup>z* is in *L*.
+
+By the pumping lemma, |*xy*| ≤ *p*, so *xy* has to be a subset of *0<sup>p</sup>*, meaning *x = 0<sup>j</sup>* and *y = 0<sup>k</sup>*, where *j + k ≤ p* and *k > 0* since |*y*| > *0* by the pumping lemma. Thus, *z = 0<sup>p-j-k</sup>110<sup>p</sup>*. If we pump *y* so that *i = 0*, we have are left with *xz*, where *xz = 0<sup>p-k</sup>110<sup>p</sup>*, which is not in *L*. Thus we have a contradiction! *L* cannot be regular.
+
 ## 2. Play the pumping game
 
 ### Exercise 1
