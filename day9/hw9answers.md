@@ -29,7 +29,7 @@ A → 0A0 → 01A10 → 010A010 → 010010
 ### b) All strings (over {a,b,c}) of the form a^{i}b^{i}c^{j}: an equal number of as and bs, followed by any number of cs. For example, aabb, aabbcc, and aabbcccc, but not aaaabbcc.
 
 ```
-A → 0A1 | C
+A → aAb | C
 C → cC | ε
 ```
 
