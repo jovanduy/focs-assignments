@@ -1,0 +1,71 @@
+# FOCS Fall 2016 Homework 14
+
+You may edit your answers into this file, or add a separate file in the same directory.
+
+If you add a separate file, please include the following at the top.
+In either case, add your name and check one of the boxes.
+
+Student Name: Frankly Olin [change to your name]
+Check one:
+[x] I completed this assignment without assistance or external resources.
+[ ] I completed this assignment with assistance from ___
+    and/or using these external resources: ___
+
+I. Math
+
+In the following problems, we will look at how rapidly different functions grow.  We are interested in figuring out when two functions grow at the same rate.  Our definition of “the same” is:  f(n) grows no faster than g(n) if there is some minimum value for the argument (we’ll call it n0) after which f(n) is no larger than a constant multiple of g(n) -- call it k*g(n).  For example, if f(n) is 367n+1098 and g(n) is 2n, n0 could be 40 and k could be 200:  367n+1098 <= 200*2n for n>40.
+
+For each of the following pairs of functions, identify a multiplier and a minimum value of n for which the first is no larger than the specified multiple of the second.  If you cannot -- if there are no such values -- explain why not.
+
+
+  A. 367n+1098     and     2n                  [n0 = 40; k=200]
+  B. n^2 + 2n + 6    and     6n^2 - 25         [n0 = 3; k=1]
+  C. n^3 + n^2 - 2n     and     6n^2 - 25      no such values because n^3 will always grow faster than n^2 assuming n cannot be 0 < n < 1
+  D. 869,438    and    923					   [n0 = 0 (actually n can be any value); k=932] n is not in either of the functions, but x=932 is the first value for which 932x > 869,438. However, no matter what constant you multiply these functions by, they do not grow, they are simply always at whatever value they are.
+  E. 2^n    and    3^n						   [n0=1; k=1] for any n > 0, the second function will always be larger so k can just be 1
+  F. 3^n    and    2^n						   no such values because an exponential with a larger base will always grow larger than one with a smaller base
+  G. log_2 n     and    log_10 n    [NB:  these are intended to be log-base-2 of n and log-base-10 of n] [n0=10; k=4]
+  H. log_10 n^2    and     log_2 n			   [n0=1; k=1] the second function grows as is (after intersecting at n=1, the second is always larger)
+
+
+II. Linear data structures
+
+For the following problem, assume that it costs 1 unit to access a structure -- an item in an array, a field in a record you are holding, the first element in a linked list -- whether reading or writing that element.  [Accessing the second element in a linked list costs 2 units if you have a pointer to the list:  1 unit to access the first element/read its “next” pointer, and another unit to access the second element.]
+
+Assume that you have n elements stored in an array and the same n elements stored in a linked list; you have no other references to these data structures.  You may assume that n > 10.  How much does it cost to perform each of the following actions?
+
+  A. Read the value of the first element in the array?  In the list?
+  		1 unit for each
+  B. Read the value of the seventh element in the array?  In the list?
+  		1 unit to read the 7th item in the array, 7 units to read the 7th item in the linked list
+  C. Add an element to the array?  [Where is the cheapest place to add it?]  To the list?  [Where is the cheapest place to add it?] 
+  		The time cost of adding an element to an array depends on where you add it. The cheapest place to add is the end of the array.
+  		However, in order to add an element anywhere else in the array, you have to shift over all of the elements that will now go after the new element, so array insertion can cost up to n units.
+  		The time cost of adding an element to a linked list also depends on where you want to add it! The cheapest place to add is at the beginning of the linked list. You simply have to change to starting pointer to point at the element you are inserting and have this element point at what used to be the first element.
+  		However, in order to add an element anywhere else in a linked list, you first have to traverse through the linked list from the starting element to the place where you want to insert, and then you can change the next pointer to the new element and add a pointer from the new element to what used to be the next element. This costs n units.
+  D. Delete the fifth element from the array?  From the list?
+  		For an array, the time cost is n-5. You have to shift to the left by one all of the remaining n-5 elements.
+  		For a linked list, the time cost is 5. You have to traverse to the 4th element (4 units) and then change the pointer to the next element from the current 5th element to the current 6th element.
+  E. Confirm that a particular element -- say x -- is present in the array?  In the list?
+  		Both could take up to n units. For both, you have to check each element and if it is not x, check the next element. For an unknown-if-sorted array you have to check the first, then the second, then the third, etc until you check the correct element, meaning this could take n checks if x is the nth element.
+  		For a linked list, you check if the first is correct, if not, move the pointer to the next element, check if that element is correct and if not, move to the next, etc until x is found. Similarly, you might have to check through all n values.
+  F. Confirm that a particular element -- say y -- is NOT present in the array?  In the list?
+		Both could take up to n units for the same reason as part E. For both data structures, you have to check if every element is y. If you find y before getting to the nth element then you spent n-indexof(y) units, but in the worst case you have to check all n elements.
+Now assume that you can maintain one extra piece of storage for the data structure.  In the case of the array, you may want to maintain a length reference.
+In the case of the linked list, what would be similarly helpful?
+		A pointer to the last element in the linked list would be similarly helpful.
+G. How much would it cost now to add an element to the end of the array?  To add an element to the end of the list?
+		Adding an element to the end of the array would cost 1 unit. Simply add another element after the last element (since you know the length you know where the last element is).
+		Adding an element to the end of the linked list would now cost 2 units. You have to move the "next" pointer of the previously last element to the new element and then move the "end of list" pointer to the new last element.
+H. How much would it cost now to delete an element from the array?  From the list?  What if it were the final element?  The penultimate element?
+		Deleting an element from the array would still take the same amount of time: n - (index of element) units because you have to shift over all of the elements after the deleted elements (which could be as large as n-1).
+		Deleting an element from the list would still take n units of time in the worst case. You have to start at the first element, and iterate through all elements until you get to the one you want (which takes i units, where i is the index of the element you want to delete). Then you move the "next" pointer from the previous pointer to the next element.
+		Deleting the final element in the array takes 1 unit because you know what index that element has since you know the length, so you just have to decrease the length by 1 (and do garbage collection of clearing out the memory of where that last element was stored).
+		Sadly deleting still takes n units because this is not a doubly linked list (you only know what the last element is, but you cannot access the penultamite element from the last element) :( you have to iterate through all n-1 elements, until finally that penultamite element's pointer points to the same element as the "last pointer". You then move the "last pointer" to that penultamite element and you clear the penultamite element's next pointer.
+		In deleting the penultamite element in the array, you have to calculate the penultamite index (1 unit to calculate  length - 1), then you have to shift over the the last element. So 2 units.
+		In deleting the penultamite element in the linked list, you have to iterate to the penultamite element (keeping track of the previous element!), which you know is the penultamite because the "last" pointer and this element's "next" pointer point to the same last element. Then you move the previous element's next pointer to the last pointer. So n-1 units to get to the second to last element + 1 unit to move the 3rd to last element's pointer = n units. However, if you have a doubly linked list then you could start at the last element, go to back two elements (3 units), then move this 3rd from last's next pointer to the last element (1 unit) and move the last element's "previous" pointer to the 3rd from last element (1 more unit), for 5 units total.
+
+Finally, assume that both the array and the linked list are sorted, i.e., that their elements are in some predictable order (say, comparable by < or <=).
+  J. How much would it cost to confirm that a particular element -- say x -- is present in the array?  In the list?  To confirm that a particular element -- say y -- is not present in the array?  In the list?
+  		For the array, this would take log(n) (log base 2 of n) time for both checking presence and non-presence.
+  		For the list, checking presence could take up to n time. You still have to traverse the list from the start, however, instead of NEEDING to go to the end of the list, you stop once you either find y or you find an element larger than y. 
